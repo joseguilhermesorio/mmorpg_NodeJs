@@ -14,18 +14,34 @@
 		<!-- incluindo css -->
 		<link href="css/style.css" rel="stylesheet">
 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#cadastro').click(function(){
+					window.location.href = '/cadastro';
+				});
+			});
+		</script>
+
 	</head>
 
 	<body class="body-index">
-
+		<% if(validacao.length > 0){ %>
+		<div class="alert alert-danger">
+			<ul>
+				<% for(var i = 0; i < validacao.length; i++){ %>
+				<li><%= validacao[i].msg %></li>
+				<% } %>
+			</ul>
+		</div>
+		<% } %>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
-				<form class="form-inline form-entrar">
+				<form class="form-inline form-entrar" action="/autenticar" method="post">
 					<div class="form-group">
 						<input type="text" name="usuario" id="usuario" placeholder="Usuário" class="form-control" autocomplete="off" />
 						<input type="password" name="senha" id="senha" placeholder="Senha" class="form-control" />
-						<button type="button" class="btn btn-success">Entrar</button>
-						<button type="button" class="btn btn-info">Cadastro</button>
+						<button type="submit" class="btn btn-success">Entrar</button>
+						<button type="button" class="btn btn-info" id="cadastro">Cadastro</button>
 					</div>
 				</form>
 			</div>
@@ -44,6 +60,5 @@
 		    	</div>
 	    	</div>
 	    </div>
-
 	</body>
 </html>
