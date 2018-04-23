@@ -17,12 +17,17 @@ module.exports.cadastrar = function(application,req,res){
     return;
   }
 
+  //Conexao ao banco de dados
+  const connection = application.config.dbConnection;
+
   //Inserir usuarios no MongoDB
-
-  const connection = application.config.dbConnection;//Conectar ao Banco de Dados
   const Usuarios = new application.app.models.Usuario(connection);//Preparar a insercao no Banco de Dados
-
   Usuarios.inserir(dadosForm);
 
-  res.send('Ok, Podemos cadastrar');
+  //Inserir dados dos Jogo
+  const Jogo = new application.app.models.Jogo(connection);
+  Jogo.gerarDados(dadosForm.usuario);
+
+
+  res.render("index",{validacao: {}});
 }
