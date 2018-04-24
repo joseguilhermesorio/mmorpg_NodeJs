@@ -4,9 +4,9 @@ module.exports.jogo = function(application,req,res){
     return;
   }
 
-  var comando_invalido = 'N';
-  if(req.query.comando_invalido == 'S'){
-    comando_invalido = 'S';
+  var msg = '';
+  if(req.query.msg !== ''){
+    msg = req.query.msg;
   }
 
 
@@ -15,7 +15,7 @@ module.exports.jogo = function(application,req,res){
   const connection = application.config.dbConnection;
   const Jogo = new application.app.models.Jogo(connection);
 
-  Jogo.iniciaJogo(usuario,req,res,comando_invalido);
+  Jogo.iniciaJogo(usuario,req,res,msg);
 }
 
 module.exports.sair = function(application,req,res){
@@ -37,7 +37,13 @@ module.exports.pergaminhos = function(application,req,res){
     res.send("Você não está logado! Faça o logi e tente novamente");
     return;
   }
-  res.render("pergaminhos",{validacao: {}});
+
+  //Recuperar as acoes inseridas no banco de dados
+
+  const connection = application.config.dbConnection;
+  const Jogo = new application.app.models.Jogo(connection);
+  var usuario = req.session.usuario;
+  Jogo.recuperaAcoes(usuario,res);
 }
 
 module.exports.ordenar_acao_sudito = function(application,req,res){
@@ -63,6 +69,19 @@ module.exports.ordenar_acao_sudito = function(application,req,res){
   dadosForm.usuario = req.session.usuario;
 
   Jogo.acao(dadosForm);
-  rres.redirec("jogo?msg=B");
+  res.redirect("jogo?msg=B");
 
+}
+
+module.exports.remover_ordem = function(application,req,res){
+  if(req.session.autorizado !== true){
+    res.send("Você não está logado! Faça o login e tente novamente!");
+  }
+
+  var url_query = req.query;
+  const connection = application.config.dbConnection;
+  const Jogo = new application.app.models.Jogo(connection);
+
+  var id_acao = url_query.id_acao;
+  Jogo.remover_ordem(id_acao,res);
 }

@@ -21,7 +21,7 @@
 				});
 
 				$('#btn_suditos').click(function(){
-					$('#msg_erros').hide();
+					$('#msg').hide();
 					$.ajax({
 						url: '/suditos',
 						method: 'get',
@@ -32,15 +32,33 @@
 				});
 
 				$('#btn_pergaminhos').click(function(){
+					$('#msg').hide();
 					$.ajax({
 						url: '/pergaminhos',
 						method: 'get',
 						success: function(data){
 							$('#acoes').html(data);
+
+							clearTimeout(timeId);
+							cronometro();
 						}
 					});
 				});
 			});
+			var timeId = null;
+			function cronometro(){
+				$('.tempo_restante').each(function(){
+					var segundos = $(this).html();
+					var segundos_restantes = parseInt(segundos) -1;
+
+					if(segundos_restantes < 0){
+						window.location.href= '/jogo?msg=C';
+					}else{
+						$(this).html(segundos_restantes);
+					}
+				});
+				timeId = setTimeout('cronometro()',1000);
+			}
 		</script>
 
 	</head>
@@ -58,8 +76,26 @@
 	    <div class="container">
 
 				<% if(msg == 'A'){ %>
-					<div class="alert alert-danger" id="msg_erros">
+					<div class="alert alert-danger" id="msg">
 						<strong>Verifique se todos os campos foram preenchidos</strong>
+					</div>
+				<% } %>
+
+				<% if(msg == 'B'){ %>
+					<div class="alert alert-success" id="msg">
+						<strong>Ação realiza com sucesso!</strong>
+					</div>
+				<% } %>
+
+				<% if(msg == 'C'){ %>
+					<div class="alert alert-success" id="msg">
+						<strong>O(s) pergaminhos foram concluidos com sucesso!</strong>
+					</div>
+				<% } %>
+
+				<% if(msg == 'D'){ %>
+					<div class="alert alert-success" id="msg">
+						<strong>O pergaminho foi revogado com sucesso!</strong>
 					</div>
 				<% } %>
 

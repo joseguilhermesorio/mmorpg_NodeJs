@@ -18,4 +18,8 @@ module.exports = function(application){
   application.post('/ordenar_acao_sudito',function(req,res){
     application.app.controllers.jogoController.ordenar_acao_sudito(application,req,res);
   })
+
+  application.get('/remover_ordem',function(req,res){
+    application.app.controllers.jogoController.remover_ordem(application,req,res);
+  })
 }
